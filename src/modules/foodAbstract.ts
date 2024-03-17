@@ -1,24 +1,5 @@
+// Deleted unused code
 import { createTag, createMultiTags } from "./functions";
-
-// abstract class Ingredient {
-//   name: string;
-//   type: string;
-//   amount: number;
-//   constructor(name: string, type: string) {
-//     this.name = name;
-//     this.type = type;
-//     this.amount = 0;
-//   }
-//   getAmount(): number {
-//     return this.amount;
-//   }
-//   addAmount() {
-//     this.amount++;
-//   }
-//   decreaseAmount() {
-//     this.amount--;
-//   }
-// }
 
 abstract class Food {
   public allComponents: string[];

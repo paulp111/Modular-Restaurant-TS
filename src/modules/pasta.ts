@@ -1,7 +1,13 @@
+// Import von uuidv4 für eine robustere, eindeutige ID-Erstellung im Gegensatz zur manuellen Methode im alten Code.
 import { v4 as uuidv4 } from "uuid";
+// Import zusätzlicher Module, die in Code 1 nicht im alten Code vorhanden sind.
 import { cart } from "../index";
 import { Cart } from "./cart";
+
+// Anstatt ein Array von Strings für die Basis und Zusätze zu verwenden,
+// werden diese nun als Objekte mit id und label definiert.
 const base = [
+  // Objekte für Pasta-Basen
   { id: "fusilli", label: "Fusilli" },
   { id: "penne", label: "Penne" },
   { id: "farfalle", label: "Farfalle" },
@@ -9,12 +15,15 @@ const base = [
   { id: "tagliatelle", label: "Tagliatelle" },
   { id: "rigatoni", label: "Rigatoni" },
 ];
+
 const sauces = [
+  // Objekte für Saucen
   { id: "tomato_sauce", label: "Tomato Sauce" },
   { id: "cream_sauce", label: "Cream Sauce" },
 ];
 
 const add_ons = [
+  // Objekte für Zusatzstoffe
   { id: "onion", label: "Onion" },
   { id: "garlic", label: "Garlic" },
   { id: "bell_pepper", label: "Bell Pepper" },
@@ -33,9 +42,10 @@ const add_ons = [
   { id: "gorgonzola", label: "Gorgonzola" },
 ];
 
-const ingredient_price = 1.5;
+const ingredient_price = 1.5; // Konstanter Preis für Zusatzstoffe.
 
 export class Pasta extends Cart {
+  // Zusätzliche Eigenschaften, die die alte Klasse nicht hatte.
   order: "PASTA";
   id: string;
   base: string;
@@ -43,8 +53,9 @@ export class Pasta extends Cart {
   sauce: string;
   price: number;
   constructor() {
-    super();
-    this.id = uuidv4();
+    super(); // Aufruf des Konstruktors der Elternklasse Cart anstelle von Food.
+    this.id = uuidv4(); // Verwendung von uuidv4 für eine eindeutige ID.
+    // Initialisierung der Eigenschaften mit Standardwerten.
     this.order = "PASTA";
     this.base = "";
     this.add_ons = {};
@@ -52,6 +63,8 @@ export class Pasta extends Cart {
     this.price = 8.5;
   }
   renderUI() {
+    // Ganz neue Methode, um eine Benutzeroberfläche für die Pasta-Klasse zu rendern.
+    // Verwendung von modernen Web-APIs anstelle der im alten Code verwendeten Helper-Funktionen.
     const listContainer = document.createElement("div");
     listContainer.classList.add("container_wrapper");
     listContainer.id = this.id;
@@ -80,7 +93,7 @@ export class Pasta extends Cart {
     var selectElement = document.createElement("select");
     selectElement.classList.add("base");
 
-    // Create options dynamically and append them to the select element
+    // Optionen dynamisch erstellen und an das Select-Element anhängen
     base.forEach(function (optionText) {
       var optionElement = document.createElement("option");
       optionElement.textContent = optionText.label;
@@ -151,6 +164,8 @@ export class Pasta extends Cart {
     document.querySelector(".pasta_content")?.append(listContainer);
   }
   add_ingredient(event: any) {
+    // Überarbeitete Logik zum Hinzufügen von Zutaten, die im alten Code nicht vorhanden war.
+    // Verwendung von spread-Operator und dynamische Preisberechnung.
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
 
@@ -170,6 +185,8 @@ export class Pasta extends Cart {
     this.renderInfo();
   }
   decrease_ingredient(event: any) {
+    // Neue Logik zum Verringern der Menge einer Zutat, die im alten Code nicht vorhanden war.
+    // Dynamische Anpassung des Preises.
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
     if (!this.add_ons[value]) return;
@@ -240,8 +257,9 @@ export class Pasta extends Cart {
   cartUI() {
     return { id: this.id, price: this.price, info: this.base };
   }
-
+  // Die Methode handleDelete ist neu und verwaltet das Löschen von Elementen im Einkaufswagen.
   handleDelete(event: any, id: string) {
+    // Implementiert das Löschen eines Pasta-Elements aus dem Warenkorb.
     cart.deleteFromCart(id);
     const removeElement = (el: HTMLElement | null) => {
       if (el && el.parentNode) {

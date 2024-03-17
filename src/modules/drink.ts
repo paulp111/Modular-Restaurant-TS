@@ -1,13 +1,10 @@
 // Importiert die UUID-Bibliothek für eindeutige Identifizierungen und integriert die Drink-Klasse in das Gesamtsystem.
-
 import { v4 as uuidv4 } from "uuid";
 // Importiert das cart-Objekt für eine direkte Integration in das Warenkorbsystem.
-
 import { cart } from "../index";
 import { Cart } from "./cart";
 
 // Definiert eine Liste verfügbarer Getränke mit ID, Bezeichnung und Preis.
-
 const drinks = [
   { id: "beer_.5l", label: "Beer, 0.5l", price: 3 },
   { id: "beer_.33l", label: "Beer, 0.33l", price: 2.7 },
@@ -20,18 +17,21 @@ const drinks = [
   { id: "mineral_water_.5l", label: "Mineral Water, 0.5l", price: 1.7 },
 ];
 
+// Erweitert die Cart-Klasse für Getränkebestellungen mit spezifischen Funktionalitäten.
 export class Drink extends Cart {
   order: "DRINKS";
   id: string;
   drinks: Record<string, number>;
   price: number;
   constructor() {
-    super();
+    super(); // Aufruf des Cart-Konstruktors für Basisinitialisierung.
     this.order = "DRINKS";
-    this.id = uuidv4();
-    this.drinks = {};
-    this.price = 0;
+    this.id = uuidv4(); // Generiert eine eindeutige ID für jede Instanz.
+    this.drinks = {}; // Initialisiert ein Objekt für die Verwaltung der Getränkeanzahl.
+    this.price = 0; // Setzt den Startpreis auf 0.
   }
+  // Render-Funktion für die Benutzeroberfläche der Getränkeauswahl.
+
   renderUI() {
     const listContainer = document.createElement("div");
     listContainer.classList.add("container_wrapper");
@@ -57,12 +57,12 @@ export class Drink extends Cart {
         <button data-id="${this.id}" data-value="${drink.id}" data-price="${drink.price}" class="drink_content add_ingredient">+</button>
         <button data-id="${this.id}" data-value="${drink.id}" data-price="${drink.price}" class="drink_content decrease_ingredient">-</button>
         `;
-      // Add event listener using DOM methods
 
       drinkContainer.append(drink_item);
     });
     primaryContainer.append(drinkContainer);
-    // Attach event listeners to the buttons
+
+    // Event Listener für das Hinzufügen und Verringern von Getränken.
     primaryContainer
       .querySelectorAll(".drink_content.add_ingredient")
       .forEach((button) => {
@@ -78,6 +78,8 @@ export class Drink extends Cart {
 
     document.querySelector(".drink_content")?.append(listContainer);
   }
+  // Funktion zum Hinzufügen eines Getränks zur Bestellung.
+
   add_ingredient(event: any) {
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
@@ -94,6 +96,8 @@ export class Drink extends Cart {
 
     this.renderInfo();
   }
+  // Funktion zum Verringern eines Getränks in der Bestellung.
+
   decrease_ingredient(event: any) {
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
@@ -120,6 +124,7 @@ export class Drink extends Cart {
     console.log(this.drinks, this.price);
     this.renderInfo();
   }
+  // Aktualisiert die Anzeige der ausgewählten Getränke und des Gesamtpreises.
 
   renderInfo() {
     const renderInfo = document
@@ -127,7 +132,6 @@ export class Drink extends Cart {
       ?.querySelector(".orderInfo")!;
     renderInfo.innerHTML = "";
 
-    // // Create an array of <h2> elements using map
     const h5Elements = Object.entries(this.drinks).map((str: any) => {
       // Create <h2> element
       const h5Element = document.createElement("h5");
@@ -149,6 +153,7 @@ export class Drink extends Cart {
     console.log("RENDER INFO", this, renderInfo);
     cart.renderCart();
   }
+  // Bereitet die Daten für die Integration in das Warenkorbsystem vor.
 
   cartUI() {
     return {

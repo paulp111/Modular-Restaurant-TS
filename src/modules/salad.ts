@@ -1,13 +1,21 @@
+// uuidv4 wird für eine eindeutige ID-Erstellung importiert.
 import { v4 as uuidv4 } from "uuid";
+// Direkter Import des Cart-Moduls zeigt eine engere Integration mit dem Warenkorb.
+
 import { cart } from "../index";
 import { Cart } from "./cart";
+
+// Zutaten werden als Objekte anstatt als einfache String-Arrays definiert.
 const base = [
+    // ... Basen für Salat als Objekte
   { id: "romaine", label: "Romaine" },
   { id: "lollo_rosso", label: "Lollo Rosso" },
   { id: "radicchio", label: "Radicchio" },
   { id: "baby_spinach", label: "Baby Spinach" },
 ];
 const sauces = [
+    // ... Saucen als Objekte
+
   { id: "olive_oil_balsamic_vinegar", label: "Olive Oil and Balsamic Vinegar" },
   {
     id: "pumpkin_seed_oil_apple_cider_vinegar",
@@ -17,6 +25,8 @@ const sauces = [
   { id: "yoghurt_dressing", label: "Yoghurt Dressing" },
 ];
 const add_ons = [
+    // ... Zusatzstoffe als Objekte
+
   { id: "carrots", label: "Carrots" },
   { id: "cucumbers", label: "Cucumbers" },
   { id: "bell_peppers", label: "Bell Peppers" },
@@ -30,7 +40,10 @@ const add_ons = [
 ];
 const ingredient_price = 1.5;
 
+// Salad erbt von Cart statt von Food, was eine bedeutende Änderung in der Klassenhierarchie darstellt.
 export class Salad extends Cart {
+    // Neue Attribute speziell für die Salad-Bestellung.
+
   order: "SALAD";
   id: string;
   base: string;
@@ -38,14 +51,17 @@ export class Salad extends Cart {
   sauce: string;
   price: number;
   constructor() {
-    super();
-    this.id = uuidv4();
+    super(); // Aufruf des Konstruktors der Superklasse 'Cart'.
+    this.id = uuidv4(); // uuidv4 für die ID-Zuweisung.
+    // Initialisierung mit Standardwerten.
     this.order = "SALAD";
     this.base = "";
     this.add_ons = {};
     this.sauce = "";
     this.price = 6.3;
   }
+
+    // Neue Methode 'renderUI' zum Erstellen der Benutzeroberfläche.
   renderUI() {
     const listContainer = document.createElement("div");
     listContainer.classList.add("container_wrapper");
@@ -145,6 +161,8 @@ export class Salad extends Cart {
 
     document.querySelector(".salad_content")?.append(listContainer);
   }
+
+    // Methoden 'add_ingredient' und 'decrease_ingredient' wurden überarbeitet, um mit dem neuen Ansatz zu funktionieren.
   add_ingredient(event: any) {
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
@@ -178,6 +196,8 @@ export class Salad extends Cart {
       this.renderInfo();
       return;
     }
+
+    // Weitere Methoden für Event-Handling und UI-Updates, die im alten Code nicht vorhanden waren.
 
     this.add_ons = {
       ...this.add_ons,
@@ -232,10 +252,13 @@ export class Salad extends Cart {
     cart.renderCart();
   }
 
+    // 'cartUI' wird wahrscheinlich für die Interaktion mit dem Warenkorb verwendet.
+
   cartUI() {
     return { id: this.id, price: this.price, info: this.base };
   }
 
+    // Die Methode 'handleDelete' ist neu und verwaltet das Löschen von Salat aus dem Warenkorb.
   handleDelete(event: any, id: string) {
     cart.deleteFromCart(id);
     const removeElement = (el: HTMLElement | null) => {
@@ -248,3 +271,5 @@ export class Salad extends Cart {
     console.log({ id });
   }
 }
+// Der neue Code verwendet moderne Entwicklungsmethoden, um ein reaktives und dynamisches Benutzererlebnis zu schaffen.
+// Die Struktur ist modulbasiert und erlaubt einfacheres Erweitern und Warten des Codes.

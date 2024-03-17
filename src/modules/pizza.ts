@@ -1,16 +1,26 @@
+// In Code 2 wird eine robustere ID-Erstellungsmethode mit 'uuidv4' verwendet.
+
 import { v4 as uuidv4 } from "uuid";
+// Die Cart-Klasse wird importiert, was darauf hindeutet, dass 'Pizza' jetzt eng mit dem Einkaufswagen verbunden ist.
+
 import { cart } from "../index";
 import { Cart } from "./cart";
+
+// Die Definition der Pizzabasis, Saucen und Add-ons wurde von Arrays von Strings zu Arrays von Objekten geändert,
+// was eine verbesserte Handhabung ermöglicht.
 const base = [
+    // ... Pizzabasen als Objekte
   { id: "wheat", label: "Wheat" },
   { id: "whole_grain", label: "Whole Grain" },
 ];
 const sauces = [
+    // ... Saucen als Objekte
   { id: "tomato_sauce", label: "Tomato Sauce" },
   { id: "white_sauce", label: "White Sauce" },
 ];
 
 const add_ons = [
+    // ... Zusatzstoffe als Objekte
   { id: "onion", label: "Onion" },
   { id: "garlic", label: "Garlic" },
   { id: "bell_pepper", label: "Bell Pepper" },
@@ -30,9 +40,12 @@ const add_ons = [
   { id: "blue_cheese", label: "Blue Cheese" },
   { id: "cheddar", label: "Cheddar" },
 ];
-const ingredient_price = 1.5;
+const ingredient_price = 1.5; // Festpreis für add-ons
 
+// 'Pizza' erbt nun von 'Cart' statt von 'Food', was eine signifikante Änderung in der Klassenhierarchie darstellt.
 export class Pizza extends Cart {
+    // Die Klasse definiert jetzt eigene Attribute für die Bestellung.
+
   order: "PIZZA";
   id: string;
   base: string;
@@ -40,14 +53,18 @@ export class Pizza extends Cart {
   sauce: string;
   price: number;
   constructor() {
-    super();
-    this.id = uuidv4();
+    super(); // Aufruf des Konstruktors der Superklasse 'Cart'.
+    this.id = uuidv4(); // Verwendung von uuidv4 für die ID-Zuweisung.
+    // Initialisierung der Eigenschaften mit Standardwerten.
     this.order = "PIZZA";
     this.base = "";
     this.add_ons = {};
     this.sauce = "";
     this.price = 9.7;
   }
+
+   // Eine völlig neue Methode 'renderUI', die die Benutzeroberfläche erstellt,
+  // deutet auf eine stärkere Trennung von UI-Logik und Geschäftslogik hin.
   renderUI() {
     const listContainer = document.createElement("div");
     listContainer.classList.add("container_wrapper");
@@ -147,6 +164,11 @@ export class Pizza extends Cart {
 
     document.querySelector(".pizza_content")?.append(listContainer);
   }
+
+  // Die Methoden 'add_ingredient' und 'decrease_ingredient' wurden ebenfalls überarbeitet,
+  // um mit dem neuen Objektansatz zu arbeiten.
+
+  // Weitere Methoden wie 'handleSelect', 'renderInfo' und 'handleDelete' sind ebenfalls neu
   add_ingredient(event: any) {
     const id = event.target.dataset.id;
     const value = event.target.dataset.value;
@@ -233,6 +255,7 @@ export class Pizza extends Cart {
     console.log("RENDER INFO", this, renderInfo);
     cart.renderCart();
   }
+  // Die Methode 'cartUI' ist neu und scheint eine Schnittstelle für die Interaktion mit dem Warenkorb zu sein.
 
   cartUI() {
     return { id: this.id, price: this.price, info: this.base };
@@ -250,3 +273,7 @@ export class Pizza extends Cart {
     console.log({ id });
   }
 }
+
+// Insgesamt deutet Code 2 auf einen Paradigmenwechsel von einer einfachen, ererbten Struktur (Code 1)
+// hin zu einem komponentenbasierten Ansatz, der die Erstellung dynamischer und interaktiver
+// Benutzeroberflächen mit eingebetteten Event-Listenern und stärkerer Integration in das Einkaufswagen-System ermöglicht.
